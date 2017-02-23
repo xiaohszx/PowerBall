@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>bg.jpg</file>
+        <file>ArrowDown.png</file>
+        <file>ArrowUp.png</file>
+    </qresource>
+</RCC>
