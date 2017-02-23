@@ -39,7 +39,7 @@ Image {
             color:"white"
             anchors.verticalCenter: parent.verticalCenter
             border.color: "green"
-            border.width: mainRect.containsMouse ?  3 : 0
+            border.width: mainRect.containsMouse ?  2 : 0
             Column {
                 anchors.top:parent.top
                 anchors.bottom: parent.bottom
@@ -74,7 +74,7 @@ Image {
             radius:25
             color:"white"
             border.color: "green"
-            border.width: mainRect.containsMouse ?  3 : 0
+            border.width: mainRect.containsMouse ?  2 : 0
             Rectangle {
                 id:ball
                 width:40
@@ -161,18 +161,31 @@ Image {
                     color:"white"
                     font.pointSize: 16
                 }
+
+
                 MouseArea {
                     id:ballArea
                     anchors.fill: parent
-                    onDoubleClicked: {
-                        ball.percent = Math.random().toFixed(2)
-                        console.log("double clicked")
-                        mouse.accepted = true
+                    Timer {
+                        id:timer
+                        interval: 200
+                        onTriggered: ballArea.singleClick()
                     }
                     onClicked:{
-                        ball.wave = true
-                        console.log("clicked")
+                        if(timer.running) {
+                            doubleClick()
+                            timer.stop()
+                        } else {
+                            timer.restart()
+                        }
                     }
+                    function singleClick() {
+                        ball.wave = true
+                    }
+                    function doubleClick() {
+                        ball.percent = Math.random().toFixed(2)
+                    }
+
                 }
             }
         }
