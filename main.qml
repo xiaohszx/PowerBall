@@ -61,11 +61,9 @@ Image {
                     }
                     Text {
                         text:"1024MB/s"
-
                     }
                 }
             }
-
         }
         Rectangle{
             id:ballrect
