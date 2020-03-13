@@ -7,6 +7,9 @@ Image {
     width:1024
     height: 768
     source:"qrc:/bg.jpg"
+    ShaderCommon {
+        id: shaderCommon
+    }
     Item {
         id:mainRect
         x:0
@@ -17,18 +20,7 @@ Image {
         MouseArea {
             id:dragArea
             anchors.fill: parent
-            property real lastX :0
-            property real lastY :0
-            onContainsMouseChanged: {
-                if(containsMouse) {
-                    lastX = mouseX
-                    lastY = mouseY
-                }
-            }
-            onPositionChanged:  {
-                mainRect.x += mouseX - lastX
-                mainRect.y += mouseY - lastY
-            }
+            drag.target: mainRect
         }
 
         Rectangle {
@@ -55,7 +47,7 @@ Image {
                         text:"1024MB/s"
                     }
                 }
-                Row{
+                Row {
                     Image{
                         source:"qrc:/ArrowDown.png"
                     }
@@ -65,7 +57,7 @@ Image {
                 }
             }
         }
-        Rectangle{
+        Rectangle {
             id:ballrect
             width:50
             height:50
@@ -83,7 +75,7 @@ Image {
                 border.width: 1
                 color:"green"
                 property real percent : 0.75
-                Behavior on percent { NumberAnimation { duration: 1000}}
+                Behavior on percent { NumberAnimation { duration: 500}}
                 property bool wave: false
                 Rectangle {
                     anchors.fill:parent
@@ -127,7 +119,7 @@ Image {
                             ball.wave = false
                         }
 
-                        fragmentShader:  "
+                        fragmentShader:  shaderCommon.versionString + "
                                     varying highp vec2 qt_TexCoord0;
                                     uniform highp float percent;
                                     uniform highp float radius;
@@ -140,7 +132,7 @@ Image {
                                         float distance = length(qt_TexCoord0 -  vec2(0.5, 0.5));
                                         if (distance - radius > antialias)
                                             discard;
-                                        float t = smoothstep(0, antialias, distance);
+                                        float t = smoothstep(0.0, antialias, distance);
                                         vec2 pulse = sin(time - frequency * qt_TexCoord0);
                                         vec2 coord = qt_TexCoord0 + amplitude * vec2(pulse.x, -pulse.x);
 
@@ -150,7 +142,6 @@ Image {
                                             gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0 - t);
                                     }
 "
-
                     }
                 }
                 Text {
@@ -181,6 +172,7 @@ Image {
                         ball.wave = true
                     }
                     function doubleClick() {
+                        ball.percent = 0
                         ball.percent = Math.random().toFixed(2)
                     }
 
