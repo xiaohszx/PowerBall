@@ -13,8 +13,6 @@ precision mediump float;
 "
 
 
-
-
     // 如果环境是OpenGL ES3，version是 version 300 es
     // ES 3.1 ES 3.2也可以。
     // ES3可以用in out 关键字，gl_FragColor也可以用out fragColor取代
